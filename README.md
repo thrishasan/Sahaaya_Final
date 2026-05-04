@@ -8,19 +8,15 @@ https://thrishasan.github.io/Sahaaya_Final/
 
 ## PROJECT OVERVIEW
 
-Sahaaya is a full-stack smart healthcare assistant web application designed to help users manage medicines, reminders, emergency SOS alerts, health records, and healthcare providers in one integrated system.
+Sahaaya is a full-stack smart healthcare assistant application designed to help users manage medicines, reminders, emergency SOS alerts, health records, and healthcare providers in a unified system.
 
-The system supports multiple user roles including:
-- Senior Citizen (Primary user)
-- Caregiver
-- Admin
-- Healthcare Provider
+It supports multiple user roles and real-world healthcare workflows including automation, emergency response, and doctor verification.
 
-It is built using:
+The system is built using:
 - Frontend: HTML, CSS, JavaScript
 - Backend: Node.js + Express.js
 - Database: SQLite
-- Local real-time scheduler system for reminders
+- Mobile Deployment: Capacitor + Android Studio
 
 ---
 
@@ -29,62 +25,61 @@ It is built using:
 ---
 
 ### 1. ROLE-BASED LOGIN SYSTEM
-- Separate access for:
-  - Senior citizens (primary users)
-  - Caregivers (assist seniors)
-  - Admin (system verification and control)
-  - Healthcare providers (doctors/hospitals/clinics)
-- Role-based navigation and feature access
+- Supports multiple roles:
+  - Senior Citizen (primary user)
+  - Caregiver
+  - Admin
+  - Healthcare Provider
+- Each role has access to specific features based on permissions
 
 ---
 
 ### 2. MEDICINE MANAGEMENT SYSTEM
-- Add medicines with dosage and timing
-- Update and delete medicines
+- Add, update, delete medicines
+- Track dosage and schedules
 - Stored in SQLite database
-- Integrated with reminder scheduler
 
 ---
 
 ### 3. SMART REMINDER SYSTEM
-- Create reminders with time and repeat options
-- Edit, disable, delete reminders
-- Background scheduler triggers alerts in real-time
-- Fully automated reminder execution using Node.js backend service
+- Time-based reminders with repeat options
+- Edit, disable, delete functionality
+- Background scheduler runs continuously in Node.js backend
+- Real-time alert triggering system
 
 ---
 
 ### 4. EMERGENCY SOS SYSTEM
 - Add emergency contacts (caretakers)
-- One-click SOS alert system
+- One-click SOS activation
 - Sends WhatsApp message with live location
 - Stores SOS history with timestamp and coordinates
-- Includes fallback flow if location is unavailable
+- Includes fallback handling if geolocation fails
 
 ---
 
 ### 5. HEALTH RECORDS MANAGEMENT
-- Store personal health data:
+- Store medical records such as:
   - Blood Pressure
   - Blood Sugar
   - Heart Rate
   - Temperature
-  - Allergy records
+  - Allergy details
 - Date-wise tracking with optional notes
 
 ---
 
 ### 6. VOICE ASSISTANT SYSTEM
-- Voice-controlled interaction with the app
+- Voice-based interaction for app navigation and commands
 - Supports multiple languages:
   - English
   - Tamil
   - Hindi
 - Intelligent fallback system:
   - If command is not understood, system responds gracefully instead of failing
-  - Responds in multiple languages with messages like:
+  - Responds in all supported languages with messages like:
     "Sorry, I didn't understand that"
-- Continuous conversational assistance for navigation and actions
+- Provides conversational responses and supports continuous interaction
 
 ---
 
@@ -93,19 +88,38 @@ It is built using:
   - Doctor
   - Hospital
   - Clinic
-- Provider registration includes:
-  - Personal details
+- Includes registration details:
   - Specialization
+  - Experience
   - License upload
 - Admin verification required before approval
-- Verified providers appear in public listing system
+- Only verified providers appear in public listings
 
 ---
 
 ### 8. ADMIN MODULE
-- Admin verifies healthcare providers
+- Admin verifies and manages healthcare providers
 - Approves or rejects provider registrations
-- Manages platform trust and safety
+- Ensures system trust and authenticity
+
+---
+
+## MOBILE DEPLOYMENT (IMPORTANT HIGHLIGHT)
+
+In addition to web deployment, the application is also converted into a mobile application using:
+
+- Capacitor (Ionic Capacitor framework)
+- Android Studio for native Android build
+
+Steps used:
+- Web assets integrated into Capacitor project
+- Android platform added using Capacitor CLI
+- Project opened in Android Studio
+- APK generated for mobile deployment
+
+This allows the same Sahaaya application to run as:
+- Web Application (Browser)
+- Mobile Application (Android)
 
 ---
 
@@ -115,6 +129,7 @@ It is built using:
 
 ### STEP 1: DOWNLOAD PROJECT
 Clone the repository:
+
 ```bash
 git clone https://github.com/your-username/Sahaaya_Final.git
 ````
@@ -125,8 +140,6 @@ OR extract ZIP file if downloaded manually.
 
 ### STEP 2: INSTALL DEPENDENCIES
 
-Navigate to project folder and install required packages:
-
 ```bash
 npm install
 ```
@@ -135,27 +148,25 @@ npm install
 
 ### STEP 3: START BACKEND SERVER
 
-Run the Node.js server:
-
 ```bash
 node server.js
 ```
 
-After successful execution, you will see:
+After successful execution:
 
-Server running at [http://localhost:3000](http://localhost:3000)
+Server runs at:
+[http://localhost:3000](http://localhost:3000)
 
 ---
 
 ### STEP 4: OPEN APPLICATION
 
-Open browser and go to:
+Open browser and visit:
 
 [http://localhost:3000](http://localhost:3000)
 
-This will load the full application with backend integration.
-
 ---
+
 
 ## IMPORTANT NOTES FOR EVALUATION
 
@@ -174,13 +185,18 @@ This will load the full application with backend integration.
 * GitHub Pages deployment is used ONLY for frontend demonstration:
   Full functionality requires local backend execution.
 
-* Sensitive files are excluded using .gitignore:
-  * node_modules/
-  * .env
-  * db.sqlite
-  * android/
-  * .idea/
+
+## IGNORED FILES (.gitignore USED)
+
+The following are NOT pushed to GitHub:
+
+* node_modules/
+* .env
+* db.sqlite
+* android/
+* .idea/
+* Capacitor config files (where sensitive)
+* build/generated files
 
 ---
-
-
+ 
