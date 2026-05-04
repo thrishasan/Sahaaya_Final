@@ -1,9 +1,6 @@
 DEPLOYED : https://thrishasan.github.io/Sahaaya_Final/
 
 
-
-DEPLOYED: https://thrishasan.github.io/Sahaaya_Final/
-
 # Sahaaya - Smart Healthcare Assistant
 
 ---
@@ -107,14 +104,10 @@ This will load the full Sahaaya application with all features enabled.
 * The Smart Reminder System includes a scheduler that continuously runs in the background to trigger reminders at the correct time.
 * The Emergency SOS module integrates geolocation and generates a WhatsApp message link for sending live location to caretakers.
 * The Voice Assistant supports multilingual interaction (English, Tamil, Hindi) and includes a fallback mechanism to handle unrecognized commands gracefully. It responds intelligently instead of failing.
-* - The Voice Assistant includes an intelligent fallback response system. When the system does not understand a user command, 
+* The Voice Assistant includes an intelligent fallback response system. When the system does not understand a user command, 
 it responds with a polite error message such as “Sorry, I did not understand” in multiple languages including English, Tamil, Hindi, and Telugu,
 ensuring better accessibility and user experience.
 * The frontend and backend are fully integrated when running locally through [http://localhost:3000/](http://localhost:3000/).
 * GitHub Pages deployment is used only for frontend demonstration; full functionality requires local backend execution.
 * The system is designed to simulate a real-world healthcare assistant application with practical use cases such as medicine tracking, emergency response, and patient record management.
 * All sensitive files such as node_modules, .env, and database files are excluded using .gitignore for security and clean repository structure.
-
- 
-Just tell 👍
-```
