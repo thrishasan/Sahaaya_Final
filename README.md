@@ -1,5 +1,5 @@
 
-DEPLOYED FRONTEND:
+DEPLOYED URL:
 https://thrishasan.github.io/Sahaaya_Final/
 
 # SAHAAYA – Smart Healthcare Assistant
