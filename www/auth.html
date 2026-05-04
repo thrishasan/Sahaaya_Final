@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sahaaya | Secure Login</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f1ea, #e6d8c3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 430px;
+}
+
+.auth-box {
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(15px);
+    padding: 35px;
+    border-radius: 25px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    text-align: center;
+}
+
+.logo {
+    margin-bottom: 20px;
+}
+
+.logo h1 {
+    font-family: 'Playfair Display', serif;
+    color: #8c6b3c;
+    font-size: 38px;
+}
+
+.logo p {
+    color: #666;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.tabs {
+    display: flex;
+    margin: 25px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f3ede4;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    cursor: pointer;
+    background: transparent;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.tab-btn.active {
+    background: #b08d57;
+    color: white;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.input-group label {
+    font-size: 14px;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 5px;
+}
+
+input, select {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 15px;
+}
+
+input:focus, select:focus {
+    border-color: #b08d57;
+}
+
+.role-buttons {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.role-btn {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    cursor: pointer;
+    background: white;
+    transition: 0.3s;
+}
+
+.role-btn.active {
+    background: #b08d57;
+    color: white;
+    border-color: #b08d57;
+}
+
+.main-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 14px;
+    background: #b08d57;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.main-btn:hover {
+    background: #8c6b3c;
+}
+
+.toggle {
+    margin-top: 15px;
+    color: #8c6b3c;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.extra-links {
+    margin-top: 15px;
+    font-size: 13px;
+    color: #666;
+}
+
+.extra-links span {
+    cursor: pointer;
+    color: #8c6b3c;
+}
+
+#otpBox {
+    margin-top: 15px;
+}
+
+.hidden {
+    display: none;
+}
+
+.success-msg {
+    color: green;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.error-msg {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+@media(max-width: 500px) {
+    .auth-box {
+        padding: 25px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="auth-container">
+    <div class="auth-box">
+
+        <div class="logo">
+            <h1>Sahaaya</h1>
+            <p>Care. Comfort. Dignity.</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showLogin()">Login</button>
+            <button class="tab-btn" onclick="showSignup()">Sign Up</button>
+        </div>
+
+        <!-- LOGIN -->
+        <div id="loginBox">
+
+            <div class="input-group">
+                <label>Phone Number</label>
+                <input id="loginPhone" placeholder="Enter phone number">
+            </div>
+
+            <div class="input-group">
+    <label>Admin Username (only for admin)</label>
+    <input id="loginUsername" placeholder="Enter username (admin only)">
+</div>
+
+            <div class="input-group">
+                <label>Select Role</label>
+                <select id="loginRole" onchange="toggleLoginType()">
+                    <option value="senior">Senior</option>
+                    <option value="caregiver">Caregiver</option>
+                    <option value="provider">Provider</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+
+            <div class="input-group" id="pinLogin">
+                <label>4-digit PIN</label>
+                <input id="loginPin" maxlength="4" placeholder="Enter PIN">
+            </div>
+
+            <div class="input-group hidden" id="passwordLogin">
+                <label>Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter password">
+            </div>
+
+            <button class="main-btn" onclick="login()">Login Securely</button>
+
+            <div class="extra-links">
+                <span onclick="alert('Feature coming soon')">Forgot Password?</span>
+            </div>
+
+            <p id="loginMsg"></p>
+
+        </div>
+
+        <!-- SIGNUP -->
+        <div id="signupBox" class="hidden">
+
+            <div class="input-group">
+                <label>Full Name</label>
+                <input id="name" placeholder="Enter full name">
+            </div>
+
+            <div class="input-group">
+                <label>Phone Number</label>
+                <input id="phone" placeholder="Enter phone number">
+            </div>
+
+            <div class="input-group">
+                <label>Select Role</label>
+                <select id="role" onchange="toggleSignupType()">
+                    <option value="senior">Senior</option>
+                    <option value="caregiver">Caregiver</option>
+                    <option value="provider">Provider</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+
+            <div class="input-group" id="pinSignup">
+                <label>Create 4-digit PIN</label>
+                <input id="pin" maxlength="4" placeholder="Create PIN">
+            </div>
+
+            <div class="input-group hidden" id="passwordSignup">
+                <label>Create Password</label>
+                <input type="password" id="password" placeholder="Create password">
+            </div>
+
+            <button class="main-btn" onclick="sendOTP()">Send OTP</button>
+
+            <div id="otpBox" class="hidden">
+                <div class="input-group">
+                    <label>Enter OTP</label>
+                    <input id="otpInput" placeholder="Enter OTP">
+                </div>
+                <button class="main-btn" onclick="verifyOTP()">Verify & Register</button>
+            </div>
+
+            <p id="signupMsg"></p>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+let generatedOTP = "";
+
+function showSignup() {
+    document.getElementById("loginBox").classList.add("hidden");
+    document.getElementById("signupBox").classList.remove("hidden");
+
+    document.querySelectorAll(".tab-btn")[0].classList.remove("active");
+    document.querySelectorAll(".tab-btn")[1].classList.add("active");
+}
+
+function showLogin() {
+    document.getElementById("signupBox").classList.add("hidden");
+    document.getElementById("loginBox").classList.remove("hidden");
+
+    document.querySelectorAll(".tab-btn")[1].classList.remove("active");
+    document.querySelectorAll(".tab-btn")[0].classList.add("active");
+}
+
+function toggleLoginType() {
+    let role = document.getElementById("loginRole").value;
+
+    if(role === "senior" || role === "caregiver") {
+        document.getElementById("pinLogin").classList.remove("hidden");
+        document.getElementById("passwordLogin").classList.add("hidden");
+    } else {
+        document.getElementById("pinLogin").classList.add("hidden");
+        document.getElementById("passwordLogin").classList.remove("hidden");
+    }
+}
+
+function toggleSignupType() {
+    let role = document.getElementById("role").value;
+
+    if(role === "senior" || role === "caregiver") {
+        document.getElementById("pinSignup").classList.remove("hidden");
+        document.getElementById("passwordSignup").classList.add("hidden");
+    } else {
+        document.getElementById("pinSignup").classList.add("hidden");
+        document.getElementById("passwordSignup").classList.remove("hidden");
+    }
+}
+
+function sendOTP() {
+    let phone = document.getElementById("phone").value;
+
+    if(phone.length < 10) {
+        document.getElementById("signupMsg").innerHTML = "<span class='error-msg'>Enter valid phone number</span>";
+        return;
+    }
+
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+
+    if(users.find(u => u.phone === phone)) {
+        document.getElementById("signupMsg").innerHTML = "<span class='error-msg'>Account already exists</span>";
+        return;
+    }
+
+    generatedOTP = Math.floor(1000 + Math.random() * 9000);
+    alert("Demo OTP: " + generatedOTP);
+
+    document.getElementById("otpBox").classList.remove("hidden");
+    document.getElementById("signupMsg").innerHTML = "<span class='success-msg'>OTP sent successfully</span>";
+}
+
+function verifyOTP() {
+    let entered = document.getElementById("otpInput").value;
+
+    if(entered != generatedOTP) {
+        document.getElementById("signupMsg").innerHTML = "<span class='error-msg'>Invalid OTP</span>";
+        return;
+    }
+
+    let user = {
+        name: document.getElementById("name").value,
+        phone: document.getElementById("phone").value,
+        role: document.getElementById("role").value,
+        pin: document.getElementById("pin").value,
+        password: document.getElementById("password").value
+    };
+
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    users.push(user);
+    localStorage.setItem("users", JSON.stringify(users));
+
+    alert("Signup successful!");
+    showLogin();
+}
+
+function login() {
+    let phone = document.getElementById("loginPhone").value;
+    let username = document.getElementById("loginUsername").value;
+    let pin = document.getElementById("loginPin").value;
+    let password = document.getElementById("loginPassword").value;
+    let role = document.getElementById("loginRole").value;
+
+    // 🔥 ADMIN LOGIN (SPECIAL CASE)
+    if (role === "admin") {
+
+        if (username === "admin" && password === "sahaaya1234") {
+            localStorage.setItem("adminLoggedIn", true);
+            localStorage.setItem("role", "admin");
+
+            window.location.href = "admin-panel.html";
+            return;
+        } else {
+            document.getElementById("loginMsg").innerHTML =
+                "<span class='error-msg'>Invalid admin credentials</span>";
+            return;
+        }
+    }
+
+    // 👇 NORMAL USERS (UNCHANGED)
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+
+    let found = users.find(u =>
+        u.phone === phone &&
+        (
+            (u.pin && u.pin === pin) ||
+            (u.password && u.password === password)
+        )
+    );
+
+    if(found) {
+        localStorage.setItem("loggedIn", true);
+        localStorage.setItem("role", found.role);
+        localStorage.setItem("currentUser", JSON.stringify(found));
+
+        window.location.href = "index.html";
+    } else {
+        document.getElementById("loginMsg").innerHTML =
+            "<span class='error-msg'>Invalid credentials</span>";
+    }
+}
+
+function toggleLoginType() {
+    let role = document.getElementById("loginRole").value;
+
+    if(role === "admin") {
+        document.getElementById("loginUsername").style.display = "block";
+        document.getElementById("pinLogin").classList.add("hidden");
+        document.getElementById("passwordLogin").classList.remove("hidden");
+    }
+    else if(role === "senior" || role === "caregiver") {
+        document.getElementById("loginUsername").style.display = "none";
+        document.getElementById("pinLogin").classList.remove("hidden");
+        document.getElementById("passwordLogin").classList.add("hidden");
+    }
+    else {
+        document.getElementById("loginUsername").style.display = "none";
+        document.getElementById("pinLogin").classList.add("hidden");
+        document.getElementById("passwordLogin").classList.remove("hidden");
+    }
+}
+</script>
+
+<script>
+document.addEventListener("backbutton", function (e) {
+    e.preventDefault();
+
+    // If there is browser history, go back
+    if (window.history.length > 1) {
+        window.history.back();
+    } else {
+        // only exit if no history exists
+        if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
+            window.Capacitor.Plugins.App.exitApp();
+        }
+    }
+});
+</script>
+
+<script>
+document.addEventListener("backbutton", function (e) {
+    e.preventDefault();
+
+    // Try going back in browser history
+    if (document.referrer && document.referrer !== "") {
+        window.history.back();
+    } 
+    else {
+        // safer fallback instead of instant exit
+        window.location.href = "index.html";
+    }
+});
+</script>
+</body>
+</html>
+ 

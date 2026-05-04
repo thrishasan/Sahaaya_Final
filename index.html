@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sahaaya – Care With Dignity</title>
+
+    <link rel="icon" type="favicon.png" href="favicon.png">
+
+
+<link rel="stylesheet" href="style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* Listening indicator animation */
+#listeningIndicator {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: red;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.5; }
+    100% { transform: scale(1); opacity: 1; }
+}
+</style>
+
+</head>
+
+<body>
+
+    <script>
+const isLoggedIn = localStorage.getItem("loggedIn");
+if (!isLoggedIn) window.location.href = "./auth.html";
+</script>
+
+<!-- NAVBAR -->
+<header class="navbar">
+    <div class="logo-container">
+        <img src="logo.png" alt="Sahaaya Logo">
+        <h1>Sahaaya</h1>
+    </div>
+
+    <div class="nav-right">
+        <div class="language-container">
+            <!-- FIXED ID -->
+            <label id="languageLabel">Language:</label>
+
+            <select id="languageSwitcher">
+                <option value="en">English</option>
+                <option value="hi">हिन्दी</option>
+                <option value="ta">தமிழ்</option>
+                <option value="te">తెలుగు</option>
+            </select>
+        </div>
+
+<span id="userInfo" style="margin-left:10px;"></span>
+<button onclick="logout()" style="margin-left:10px;">Logout</button>
+        <!-- 🎤 VOICE BUTTON (NEW) -->
+        <button id="voiceBtn">🎤</button>
+
+        <!-- DARK MODE -->
+        <button id="modeToggle">🌙</button>
+    </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h2 id="heroTitle">Care. Comfort. Dignity.</h2>
+        <p id="heroDesc">
+            Empowering senior citizens with safe, smart and compassionate care solutions.
+        </p>
+        <button class="cta-btn" id="getStartedBtn">Get Started</button>
+    </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services">
+    <h2 id="servicesTitle">Our Services</h2>
+
+    <div class="services-grid">
+
+        <a href="medicine.html" class="service-link">
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1587854692152-cbe660dbde88?q=80&w=1200">
+                <h3 id="service2">Medicine Management</h3>
+            </div>
+        </a>
+
+        <a href="reminders.html" class="service-link">
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1506784365847-bbad939e9335?q=80&w=1200">
+                <h3 id="service3">Smart Reminders</h3>
+            </div>
+        </a>
+
+        <a href="records.html" class="service-link">
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=1200">
+                <h3 id="service4">Health Records</h3>
+            </div>
+        </a>
+
+        <a href="emergency.html" class="service-link">
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1579154204601-01588f351e67?q=80&w=1200">
+                <h3 id="service5">Emergency Support</h3>
+            </div>
+        </a>
+
+        <a href="providers.html" class="service-link">
+    <div class="card">
+        <img src="https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=1200">
+        <h3>Find Care</h3>
+    </div>
+</a>
+
+<a href="doctor-register.html" class="service-link">
+    <div class="card">
+        <img src="https://images.unsplash.com/photo-1584515933487-779824d29309?q=80&w=1200">
+        <h3>Join as Provider</h3>
+    </div>
+</a>
+
+
+
+
+    </div>
+</section>
+
+<!-- 🔴 LISTENING INDICATOR -->
+<div id="listeningIndicator"></div>
+
+<div id="llmChatBox" style="margin-top:10px; font-weight:bold;"></div>
+
+<!-- 🧠 VOICE STATUS TEXT -->
+<p id="voiceStatus" style="text-align:center; margin:10px;"></p>
+
+<!-- FOOTER -->
+<footer>
+    © 2026 Sahaaya | Designed for Independence & Safety
+</footer>
+
+<!-- SCRIPTS (ORDER MATTERS) -->
+
+<script type="module" src="reminderAPI.js"></script>
+<script type="module" src="script.js"></script>
+<script type="module" src="voiceAssistant.js"></script>
+<!-- <script type="module" src="reminders.js"></script> -->
+
+<script>
+let role = localStorage.getItem("role");
+
+document.getElementById("userInfo").innerText =
+    role ? "Logged in as: " + role : "";
+
+function logout(){
+    localStorage.clear();
+    window.location.href = "./auth.html";
+}
+</script>
+
+
+</body>
+</html> 

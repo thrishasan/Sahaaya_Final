@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Reminders - Sahaaya</title>
+<link rel="icon" type="favicon.png" href="favicon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="feature-page">
+
+    <h1 id="remindersTitle">⏰ Smart Reminders</h1>
+
+    <div class="form-box">
+        <input type="text" id="reminderText" placeholder="Enter reminder" required>
+        <input type="time" id="reminderTime" required>
+
+        <select id="repeatType">
+            <option value="none">Once</option>
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+        </select>
+
+        <button type="button" id="addReminderBtn">Add Reminder</button>
+    </div>
+
+    <h2>Reminder List</h2>
+
+    <table id="medicineTable">
+        <thead>
+            <tr>
+                <th>Reminder</th>
+                <th>Time</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="reminderList">
+            <tr><td colspan="3">No reminders added yet</td></tr>
+        </tbody>
+    </table>
+
+    <div class="bottom-home">
+        <button onclick="window.location.href='index.html'">⬅ Back to Home</button>
+    </div>
+
+</div>
+
+<h2>History</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Reminder</th>
+            <th>Time</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="historyList"></tbody>
+</table>
+
+<!-- ================= VOICE ASSISTANT ================= -->
+<div class="voice-box">
+    <button id="getStartedBtn" class="mic-btn">🎤 Tap to Speak</button>
+    <div class="waveform" id="waveform">
+        <span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div id="voiceStatus"></div>
+</div>
+
+<!-- ================= ALARM MODAL ================= -->
+<div id="alarmModal" class="alarm-modal">
+    <div class="alarm-container">
+        <div class="alarm-clock" id="alarmClock">00:00</div>
+        <div class="alarm-icon">⏰</div>
+        <h2 id="alarmTitle">Reminder</h2>
+        <p id="alarmText">Time for your reminder</p>
+        <div class="alarm-buttons">
+            <button id="snoozeBtn" class="snooze" type="button">Snooze 5 min</button>
+            <button id="dismissBtn" class="dismiss" type="button">Dismiss</button>
+        </div>
+    </div>
+</div>
+
+<!-- ================= SCRIPTS — ORDER MATTERS ================= -->
+
+<!-- 1. reminders.js FIRST — defines addReminder() that voiceAssistant needs -->
+<script type="module" src="reminders.js"></script>
+
+<!-- 2. scheduler.js — needs reminders.js already loaded -->
+<script type="module" src="scheduler.js"></script>
+
+<!-- 3. voiceAssistant.js LAST — calls addReminder(), so must load after reminders.js -->
+<script src="voiceAssistant.js" defer></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const voiceReminder = localStorage.getItem("voiceReminder");
+    if (voiceReminder) {
+        document.getElementById("reminderText").value = voiceReminder;
+        localStorage.removeItem("voiceReminder");
+    }
+});
+</script>
+
+</body>
+</html>

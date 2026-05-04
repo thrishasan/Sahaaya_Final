@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Medicine Management - Sahaaya</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="feature-page">
+
+  <h1 id="medicineTitle">Medicine Management</h1>
+
+  <div class="form-box">
+    <input type="text"  id="medName"   placeholder="Medicine Name">
+    <input type="text"  id="medDosage" placeholder="Dosage (e.g., 1 tablet)">
+    <input type="time"  id="medTime">
+    <button onclick="addMedicine()" id="addMedicineBtn">Add Medicine</button>
+  </div>
+
+  <table id="medicineTable">
+    <thead>
+      <tr>
+        <th>Medicine</th>
+        <th>Dosage</th>
+        <th>Time</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="medicineList"></tbody>
+  </table>
+
+  <div class="bottom-home">
+    <button onclick="window.location.href='index.html'">⬅ Back to Home</button>
+  </div>
+
+</div>
+
+<!-- ========== ALARM MODAL ========== -->
+<div id="alarmModal" class="alarm-modal">
+  <div class="alarm-container">
+    <div class="alarm-clock" id="alarmClock">00:00</div>
+    <div class="alarm-icon">⏰</div>
+    <h2 id="alarmTitle">Reminder</h2>
+    <p  id="alarmText">Time for your reminder</p>
+    <div class="alarm-buttons">
+      <button id="snoozeBtn"  class="snooze">Snooze</button>
+      <button id="dismissBtn" class="dismiss">Dismiss</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== MEDICINE MODAL (FIX 5 — was missing entirely) ========== -->
+<div id="medicineModal" style="
+    display:none; position:fixed; inset:0;
+    background:rgba(0,0,0,0.55); z-index:10000;
+    justify-content:center; align-items:center;">
+  <div style="
+      background:#fff; border-radius:16px;
+      padding:32px 28px; text-align:center;
+      max-width:340px; width:90%;
+      box-shadow:0 8px 32px rgba(0,0,0,0.25);">
+    <div style="font-size:48px; margin-bottom:8px;">💊</div>
+    <h2 style="margin:0 0 8px;">Time for your medicine!</h2>
+    <p  style="font-size:1.15rem; font-weight:600; margin:4px 0;" id="medicineName">—</p>
+    <p  style="color:#555; margin:4px 0 24px;" id="medicineDosage">—</p>
+    <button id="takenBtn" style="
+        background:#27ae60; color:#fff;
+        border:none; border-radius:10px;
+        padding:12px 36px; font-size:1rem;
+        cursor:pointer; font-weight:600;">
+      ✅ Mark as Taken
+    </button>
+    <br><br>
+    <button onclick="
+    document.getElementById('medicineModal').style.display='none';
+    if (window.dismissAlarm) window.dismissAlarm();
+"
+style="background:transparent; border:none; color:#888; cursor:pointer; font-size:0.9rem;">
+  Dismiss
+</button>
+  </div>
+</div>
+
+<!-- ========== VOICE ASSISTANT UI ========== -->
+<div class="voice-box">
+  <button id="getStartedBtn" class="mic-btn">🎤 Tap to Speak</button>
+  <div class="waveform" id="waveform">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div id="voiceStatus"></div>
+</div>
+
+<script src="script.js"></script>
+<script type="module" src="scheduler.js"></script>
+<script type="module" src="medicines.js"></script>
+<script src="voiceAssistant.js"></script>
+
+</html>

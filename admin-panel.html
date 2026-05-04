@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sahaaya Admin Panel</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+    margin:0;
+    font-family:'Poppins',sans-serif;
+    background:#f5f1ea;
+}
+
+/* WRAPPER FIX (IMPORTANT - removes overlap issue) */
+.wrapper{
+    display:flex;
+    min-height:100vh;
+}
+
+/* SIDEBAR (LIGHT BROWN THEME) */
+.sidebar{
+    width:240px;
+    background:#b08b57;
+    color:white;
+    padding:20px;
+    flex-shrink:0;
+    position:sticky;
+    top:0;
+    height:100vh;
+}
+
+.sidebar h2{
+    font-size:20px;
+    margin-bottom:25px;
+}
+
+.sidebar p{
+    opacity:0.9;
+    font-size:13px;
+}
+
+/* MAIN AREA (FIXED SPACING) */
+.main{
+    flex:1;
+    padding:25px;
+    overflow-x:hidden;
+}
+
+/* TOP BAR */
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:white;
+    padding:15px 20px;
+    border-radius:14px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.06);
+}
+
+.logout-btn{
+    background:crimson;
+    color:white;
+    border:none;
+    padding:8px 12px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+/* STATS */
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+    margin-top:20px;
+}
+
+.card-stat{
+    background:white;
+    padding:18px;
+    border-radius:14px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.06);
+}
+
+/* SEARCH */
+.search-box{
+    margin-top:20px;
+}
+
+.search-box input{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid #ddd;
+    box-sizing:border-box;
+}
+
+/* CARD */
+.card{
+    background:white;
+    margin-top:15px;
+    padding:18px;
+    border-radius:14px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.05);
+}
+
+.top-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.badge{
+    padding:4px 10px;
+    border-radius:20px;
+    font-size:12px;
+    color:white;
+}
+
+.pending{background:#f59e0b;}
+.verified{background:#10b981;}
+.rejected{background:#ef4444;}
+
+/* ACTIONS */
+.actions{
+    margin-top:10px;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+button{
+    border:none;
+    padding:8px 12px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:13px;
+}
+
+.verify{background:#10b981;color:white;}
+.reject{background:#ef4444;color:white;}
+.delete{background:#6b7280;color:white;}
+
+.empty{
+    text-align:center;
+    margin-top:20px;
+    color:#666;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h2>🏥 Sahaaya Admin</h2>
+    <p>Verification Panel</p>
+    <hr style="opacity:0.3">
+
+    <p>• Providers</p>
+    <p>• Pending Requests</p>
+    <p>• Verified List</p>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="topbar">
+    <h3>Dashboard</h3>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+    <div class="card-stat">
+        <h3 id="totalCount">0</h3>
+        <p>Total</p>
+    </div>
+
+    <div class="card-stat">
+        <h3 id="verifiedCount">0</h3>
+        <p>Verified</p>
+    </div>
+
+    <div class="card-stat">
+        <h3 id="pendingCount">0</h3>
+        <p>Pending</p>
+    </div>
+</div>
+
+<!-- SEARCH -->
+<div class="search-box">
+    <input placeholder="Search providers..." onkeyup="searchProviders(this.value)">
+</div>
+
+<!-- LIST -->
+<div id="providerList"></div>
+<div id="empty" class="empty"></div>
+
+</div>
+</div>
+
+<script>
+    if(localStorage.getItem("adminLoggedIn") !== "true"){
+    window.location.href = "auth.html";
+}
+
+
+let doctors = JSON.parse(localStorage.getItem("doctors")) || [];
+
+
+
+ console.log(localStorage.getItem("doctors"));
+
+function load(){
+    doctors = JSON.parse(localStorage.getItem("doctors")) || [];
+    render(doctors);
+    stats();
+
+    setInterval(()=>{
+        let latest = JSON.parse(localStorage.getItem("doctors")) || [];
+        if(JSON.stringify(latest)!==JSON.stringify(doctors)){
+            doctors = latest;
+            render(doctors);
+            stats();
+        }
+    },2000);
+}
+
+function stats(){
+    totalCount.innerText = doctors.length;
+    verifiedCount.innerText = doctors.filter(d=>d.status==="Verified").length;
+    pendingCount.innerText = doctors.filter(d=>d.status==="Pending").length;
+}
+
+function render(data){
+    providerList.innerHTML="";
+
+    if(data.length===0){
+        empty.innerText="No providers found";
+        return;
+    }
+
+    empty.innerText="";
+
+    data.forEach((d,i)=>{
+
+        let status = d.status || "Pending";
+
+        providerList.innerHTML += `
+        <div class="card">
+
+            <div class="top-row">
+                <h3>${d.name || "Unknown"}</h3>
+                <span class="badge ${status.toLowerCase()}">${status}</span>
+            </div>
+
+            <p>${d.specialization || ""}</p>
+            <p>${d.location || ""}</p>
+            <p>${d.phone || ""}</p>
+            ${d.fee ? `<p><strong>Fee:</strong> ₹${d.fee}</p>` : ""}
+
+${d.license ? `
+    <button onclick="openLicense('${d.license}')"
+    style="margin-top:8px;background:#8c6b3c;color:white;padding:6px 10px;border:none;border-radius:6px;cursor:pointer;">
+        📄 View License
+    </button>
+` : ""}
+
+            ${d.reason ? `<p style="color:red">Reason: ${d.reason}</p>` : ""}
+
+            <div class="actions">
+
+                ${status==="Pending" ? `
+                <button class="verify" onclick="verify(${i})">Verify</button>
+                <button class="reject" onclick="reject(${i})">Reject</button>
+                ` : ""}
+
+                <button class="delete" onclick="del(${i})">Delete</button>
+
+            </div>
+
+        </div>`;
+    });
+}
+
+function verify(i){
+    doctors[i].status="Verified";
+    save();
+}
+
+function reject(i){
+    let r = prompt("Reason:");
+    doctors[i].status="Rejected";
+    doctors[i].reason = r || "Not specified";
+    save();
+}
+
+function del(i){
+    doctors.splice(i,1);
+    save();
+}
+
+function save(){
+    localStorage.setItem("doctors",JSON.stringify(doctors));
+    load();
+}
+
+function searchProviders(q){
+    q=q.toLowerCase();
+    render(doctors.filter(d=>
+        (d.name||"").toLowerCase().includes(q) ||
+        (d.specialization||"").toLowerCase().includes(q) ||
+        (d.location||"").toLowerCase().includes(q)
+    ));
+}
+
+function logout(){
+    localStorage.removeItem("loggedIn");
+    localStorage.removeItem("role");
+    localStorage.removeItem("currentUser");
+    localStorage.removeItem("adminLoggedIn");
+
+    window.location.href = "auth.html";
+}
+
+load();
+
+function openLicense(dataUrl) {
+    try {
+        const newTab = window.open();
+
+        if (!newTab) {
+            alert("Popup blocked. Please allow popups for Sahaaya.");
+            return;
+        }
+
+        // detect file type (basic but works well for your case)
+        let isPDF = dataUrl.includes("application/pdf") || dataUrl.endsWith(".pdf");
+
+        if (isPDF) {
+            newTab.document.write(`
+                <html>
+                <head>
+                    <title>License Preview</title>
+                    <style>
+                        body { margin:0; background:#111; }
+                        iframe {
+                            width:100vw;
+                            height:100vh;
+                            border:none;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <iframe src="${dataUrl}" type="application/pdf"></iframe>
+                </body>
+                </html>
+            `);
+        } else {
+            // fallback for images or other docs
+            newTab.location.href = dataUrl;
+        }
+
+    } catch (err) {
+        alert("Unable to open file preview");
+        console.error(err);
+    }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sahaaya | Premium Find Care</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f5f1ea, #e6d8c3);
+    color: #333;
+}
+
+/* HERO */
+.hero {
+    height: 260px;
+    background: url('https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=1600') center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+}
+
+.hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    margin-bottom: 10px;
+}
+
+.container {
+    max-width: 1100px;
+    margin: -40px auto 40px;
+    padding: 20px;
+}
+
+.top-controls {
+    background: white;
+    padding: 20px;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    margin-bottom: 25px;
+}
+
+.search-box {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+}
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.filters select,
+.filters button {
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+}
+
+.filters select {
+    background: #f8f8f8;
+    flex: 1;
+}
+
+.emergency-btn {
+    background: #c62828;
+    color: white;
+    cursor: pointer;
+}
+
+.saved-btn {
+    background: #b08b57;
+    color: white;
+    cursor: pointer;
+}
+
+.message {
+    text-align: center;
+    padding: 14px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    background: #fff3cd;
+}
+
+.providers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+.card-top {
+    display: flex;
+    gap: 15px;
+}
+
+.card img {
+    width: 85px;
+    height: 85px;
+    border-radius: 15px;
+    object-fit: cover;
+}
+
+.badge {
+    background: #2e7d32;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.rating {
+    color: #ff9800;
+    font-weight: bold;
+}
+
+.meta {
+    font-size: 14px;
+    color: #555;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.call { background: #2e7d32; color: white; }
+.book { background: #b08b57; color: white; }
+.save { background: #f5f1ea; }
+.map { background: #1976d2; color: white; }
+
+.empty {
+    text-align: center;
+    padding: 30px;
+    color: #666;
+}
+</style>
+</head>
+
+<body>
+
+<div class="hero">
+    <div class="hero-content">
+        <h1>Find Trusted Healthcare Providers</h1>
+        <p>Doctors • Clinics • Hospitals • Emergency Care</p>
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="top-controls">
+
+        <input type="text" class="search-box" id="searchInput"
+            placeholder="Search providers..."
+            onkeyup="filterProviders()">
+
+        <div class="filters">
+            <select id="typeFilter" onchange="filterProviders()">
+                <option value="">All Types</option>
+                <option value="Doctor">Doctor</option>
+                <option value="Hospital">Hospital</option>
+                <option value="Clinic">Clinic</option>
+            </select>
+
+            <select id="specializationFilter" onchange="filterProviders()">
+                <option value="">All Specializations</option>
+                <option value="Cardiology">Cardiology</option>
+                <option value="General">General</option>
+                <option value="Orthopedic">Orthopedic</option>
+            </select>
+
+            <button class="emergency-btn" onclick="showEmergency()">🚑 Emergency</button>
+            <button class="saved-btn" onclick="viewSaved()">❤️ Saved</button>
+        </div>
+
+    </div>
+
+    <div id="message" class="message"></div>
+
+    <div id="providersList" class="providers-grid"></div>
+
+    <div id="empty" class="empty"></div>
+
+</div>
+
+<script>
+
+let role = localStorage.getItem("role");
+let savedProviders = JSON.parse(localStorage.getItem("savedProviders")) || [];
+let currentBooking = "";
+
+// IMPORTANT: always read fresh data
+function getDoctors() {
+    return JSON.parse(localStorage.getItem("doctors")) || [];
+}
+
+let allDoctors = getDoctors();
+
+if(role !== "senior" && role !== "caregiver"){
+    document.getElementById("message").innerText =
+        "⚠ View only mode. Login as Senior/Caregiver for booking.";
+} else {
+    document.getElementById("message").innerText =
+        "✔ Showing verified healthcare providers.";
+}
+
+function renderProviders(data) {
+    const container = document.getElementById("providersList");
+    const empty = document.getElementById("empty");
+
+    container.innerHTML = "";
+
+    let count = 0;
+
+    data.forEach(d => {
+
+        if (d.status !== "Verified") return;
+
+        count++;
+
+        container.innerHTML += `
+            <div class="card">
+                <div class="card-top">
+                    <img src="${d.image}" />
+                    <div>
+                        <h3>${d.name}</h3>
+                        <span class="badge">✔ Verified</span>
+                        <div class="rating">⭐ ${d.rating}</div>
+                        <div class="meta">${d.type} • ${d.specialization}</div>
+                    </div>
+                </div>
+
+                <div class="meta">📍 ${d.location}</div>
+                <div class="meta">🩺 ${d.experience}</div>
+                <div class="meta">💰 ${d.fee}</div>
+
+                <div class="actions">
+                    <button class="btn call" onclick="callProvider('${d.phone}')">📞 Call</button>
+                    <button class="btn book" onclick="bookAppointment('${d.name}')">📅 Book</button>
+                    <button class="btn save" onclick="saveProvider('${d.name}')">❤️ Save</button>
+                    <button class="btn map" onclick="viewMap('${d.location}')">🗺 Map</button>
+                </div>
+            </div>
+        `;
+    });
+
+    empty.innerText = count === 0 ? "No verified providers found." : "";
+}
+
+function filterProviders() {
+
+    let doctors = getDoctors();
+
+    const query = document.getElementById("searchInput").value.toLowerCase();
+    const type = document.getElementById("typeFilter").value;
+    const spec = document.getElementById("specializationFilter").value;
+
+    let filtered = doctors.filter(d =>
+        d.status === "Verified" &&
+        (d.name.toLowerCase().includes(query) ||
+         d.location.toLowerCase().includes(query) ||
+         d.specialization.toLowerCase().includes(query)) &&
+        (!type || d.type === type) &&
+        (!spec || d.specialization === spec)
+    );
+
+    renderProviders(filtered);
+}
+
+function callProvider(phone){
+    alert("Calling " + phone);
+}
+
+function bookAppointment(name){
+    if(role !== "senior" && role !== "caregiver"){
+        alert("Login required");
+        return;
+    }
+    alert("Booking with " + name);
+}
+
+function saveProvider(name){
+    if(!savedProviders.includes(name)){
+        savedProviders.push(name);
+        localStorage.setItem("savedProviders", JSON.stringify(savedProviders));
+    }
+}
+
+function viewSaved(){
+    alert(savedProviders.join("\n"));
+}
+
+function showEmergency(){
+    alert("Emergency feature coming soon");
+}
+
+function viewMap(loc){
+    window.open("https://www.google.com/maps/search/" + loc);
+}
+
+// INITIAL LOAD
+renderProviders(getDoctors());
+
+</script>
+
+</body>
+</html>

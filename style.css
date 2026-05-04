@@ -1,0 +1,972 @@
+/* =============================================
+   BASE RESET & BOX MODEL
+   ============================================= */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+}
+
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* =============================================
+   CSS VARIABLES (Design tokens)
+   ============================================= */
+:root {
+    --gold:         #b08d57;
+    --gold-dark:    #8c6b3c;
+    --gold-light:   #d4a373;
+    --bg:           #f5f2ec;
+    --bg-card:      #ffffff;
+    --text:         #222222;
+    --text-muted:   #555555;
+    --danger:       #c0392b;
+    --blue:         #2b7cff;
+    --shadow-sm:    0 4px 12px rgba(0,0,0,0.07);
+    --shadow-md:    0 8px 24px rgba(0,0,0,0.10);
+    --shadow-lg:    0 15px 40px rgba(0,0,0,0.13);
+    --radius-sm:    6px;
+    --radius-md:    12px;
+    --radius-lg:    20px;
+    --radius-full:  9999px;
+    --transition:   0.25s ease;
+    --navbar-h:     80px;
+}
+
+/* =============================================
+   TYPOGRAPHY
+   ============================================= */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    transition: background var(--transition), color var(--transition);
+    line-height: 1.6;
+}
+
+h1, h2, h3 {
+    font-family: 'Playfair Display', serif;
+    line-height: 1.2;
+}
+
+/* =============================================
+   DARK MODE
+   ============================================= */
+body.dark {
+    --bg:       #111111;
+    --bg-card:  #1e1e1e;
+    --text:     #f0f0f0;
+    --text-muted: #aaaaaa;
+}
+
+body.dark .navbar   { background: #1a1a1a; }
+body.dark .card     { background: var(--bg-card); }
+body.dark .emergency{ background: #333; }
+body.dark #reminderList li { background: #2a2a2a; color: var(--text); }
+body.dark th        { background-color: #2a2a2a; }
+
+/* =============================================
+   NAVBAR
+   ============================================= */
+.navbar {
+    width: 100%;
+    height: var(--navbar-h);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 clamp(16px, 5vw, 80px);
+    background: var(--bg-card);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-container img {
+    width: clamp(40px, 6vw, 60px);
+}
+
+.logo-container h1 {
+    font-size: clamp(18px, 3vw, 28px);
+    color: var(--text);
+    white-space: nowrap;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.language-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.language-container label {
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+#languageSwitcher {
+    padding: 6px 8px;
+    border-radius: var(--radius-sm);
+    border: 1px solid #ccc;
+    font-size: 13px;
+    background: var(--bg-card);
+    color: var(--text);
+}
+
+#modeToggle {
+    padding: 7px 12px;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    border: 1px solid #ccc;
+    background: var(--bg-card);
+    color: var(--text);
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+/* =============================================
+   HERO
+   ============================================= */
+.hero {
+    width: 100%;
+    min-height: 100svh;   /* svh = small viewport height — safe on mobile */
+    background: url("hero.jpg") center center / cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: white;
+    max-width: 860px;
+    padding: 20px clamp(16px, 5vw, 40px);
+}
+
+.hero-content h2 {
+    font-size: clamp(32px, 7vw, 64px);
+    margin-bottom: 16px;
+}
+
+.hero-content p {
+    font-size: clamp(15px, 2.5vw, 20px);
+    margin-bottom: 28px;
+    opacity: 0.9;
+}
+
+.cta-btn {
+    padding: 14px 32px;
+    background: var(--gold);
+    border: none;
+    color: white;
+    font-size: clamp(15px, 2vw, 18px);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    font-family: 'Poppins', sans-serif;
+    transition: background var(--transition), transform var(--transition);
+}
+
+.cta-btn:hover {
+    background: var(--gold-dark);
+    transform: translateY(-2px);
+}
+
+/* =============================================
+   SERVICES
+   ============================================= */
+.services {
+    padding: clamp(48px, 8vw, 100px) clamp(16px, 5vw, 80px);
+    text-align: center;
+    position: relative;
+    z-index: 5;
+}
+
+.services h2 {
+    margin-bottom: 40px;
+    font-size: clamp(24px, 4vw, 36px);
+    color: var(--text);
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(180px, 100%), 1fr));
+    gap: 16px;
+}
+
+.card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: transform var(--transition), box-shadow var(--transition);
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+}
+
+.card img {
+    width: 100%;
+    height: clamp(140px, 20vw, 220px);
+    object-fit: cover;
+}
+
+.card h3 {
+    padding: 16px;
+    font-size: clamp(15px, 2vw, 20px);
+    color: var(--text);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+/* =============================================
+   EMERGENCY SECTION
+   ============================================= */
+.emergency {
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    color: white;
+    padding: clamp(48px, 8vw, 100px) clamp(16px, 5vw, 40px);
+    text-align: center;
+}
+
+.emergency h2 {
+    font-size: clamp(22px, 4vw, 36px);
+    margin-bottom: 12px;
+}
+
+.sos-btn {
+    background: var(--danger);
+    padding: 14px 30px;
+    border: none;
+    color: white;
+    font-size: clamp(15px, 2vw, 18px);
+    cursor: pointer;
+    margin-top: 20px;
+    border-radius: var(--radius-sm);
+    font-family: 'Poppins', sans-serif;
+    transition: background var(--transition);
+}
+
+.sos-btn:hover { background: #a93226; }
+
+.big-sos {
+    font-size: clamp(28px, 5vw, 40px);
+    width: clamp(120px, 20vw, 180px);
+    height: clamp(120px, 20vw, 180px);
+    border-radius: 50%;
+    background: #ff3b3b;
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 0 28px rgba(255, 0, 0, 0.45);
+    animation: pulse 2s infinite;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* =============================================
+   FOOTER
+   ============================================= */
+footer {
+    padding: 20px;
+    text-align: center;
+    background: #111;
+    color: white;
+    font-size: 13px;
+}
+
+/* =============================================
+   FEATURE PAGES (shared layout)
+   ============================================= */
+.feature-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f2ec, #e8dfcf);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    padding: clamp(24px, 5vw, 80px) clamp(16px, 5vw, 80px) 120px; /* bottom padding for floating buttons */
+}
+
+.feature-page h1 {
+    font-size: clamp(26px, 5vw, 40px);
+    margin-bottom: 28px;
+    color: var(--gold-dark);
+    text-align: center;
+}
+
+/* =============================================
+   GLASS FORM BOX
+   ============================================= */
+.form-box {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    padding: clamp(20px, 4vw, 32px);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 28px;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+}
+
+.form-box input,
+.form-box select {
+    width: min(200px, 100%);
+    padding: 11px 12px;
+    margin: 8px;
+    border: 1px solid #ccc;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    background: white;
+    color: #222;
+}
+
+.form-box button {
+    padding: 12px 22px;
+    background: var(--gold);
+    border: none;
+    color: white;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    transition: background var(--transition), transform var(--transition);
+    margin: 6px;
+}
+
+.form-box button:hover {
+    background: var(--gold-dark);
+    transform: translateY(-1px);
+}
+
+/* =============================================
+   REMINDER LIST
+   ============================================= */
+#reminderList {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+    max-width: 480px;
+}
+
+#reminderList li {
+    background: var(--bg-card);
+    padding: 12px 16px;
+    margin: 10px 0;
+    border-radius: var(--radius-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition);
+    font-size: 14px;
+    gap: 10px;
+}
+
+#reminderList li:hover { transform: translateY(-2px); }
+
+#reminderList li > span {
+    flex: 1;
+    text-align: left;
+    word-break: break-word;
+}
+
+#reminderList li button,
+#reminderList li .delete-btn {
+    background: transparent;
+    border: none;
+    color: var(--danger);
+    font-size: 18px;
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 2px 6px;
+    transition: transform var(--transition);
+}
+
+#reminderList li button:hover,
+#reminderList li .delete-btn:hover { transform: scale(1.25); }
+
+/* =============================================
+   MEDICINE REMINDER BLOCK
+   ============================================= */
+.medicine-reminder {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(10px);
+    padding: 24px;
+    margin: 20px 0;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    width: 100%;
+    max-width: 680px;
+}
+
+.medicine-reminder h2 {
+    margin-bottom: 16px;
+    font-size: clamp(18px, 3vw, 24px);
+    font-family: 'Playfair Display', serif;
+    color: var(--gold-dark);
+}
+
+.reminder-inputs {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+    justify-content: center;
+}
+
+.reminder-inputs input {
+    padding: 10px 12px;
+    font-size: 14px;
+    flex: 1 1 140px;
+    min-width: 120px;
+    max-width: 220px;
+    border-radius: var(--radius-sm);
+    border: 1px solid #ccc;
+    font-family: 'Poppins', sans-serif;
+}
+
+.reminder-inputs button {
+    padding: 10px 18px;
+    background: #27ae60;
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    flex-shrink: 0;
+    transition: background var(--transition);
+}
+
+.reminder-inputs button:hover { background: #2ecc71; }
+
+/* =============================================
+   DATA TABLE (medicine, reminders)
+   ============================================= */
+.table-wrapper {
+    width: 100%;
+    max-width: 720px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+table {
+    width: 100%;
+    min-width: 420px;       /* prevents extreme squish; allows horizontal scroll */
+    border-collapse: collapse;
+    margin-top: 0;
+    background: var(--bg-card);
+}
+
+th {
+    background: var(--gold);
+    color: white;
+    padding: 13px 12px;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--bg-card);
+}
+
+tr:last-child td { border-bottom: none; }
+
+td button,
+.delete-btn {
+    background: transparent;
+    border: none;
+    color: var(--danger);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 2px 6px;
+    transition: transform var(--transition);
+}
+
+td button:hover,
+.delete-btn:hover { transform: scale(1.2); }
+
+/* Keep the old #medicineTable selector working too */
+#medicineTable { width: 100%; }
+#medicineTable th { background: var(--gold); color: white; padding: 12px; }
+#medicineTable td { padding: 12px; border-bottom: 1px solid #ddd; }
+#medicineTable td button {
+    background: var(--danger);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+}
+
+.normal  { color: #27ae60; font-weight: bold; }
+.warning { color: var(--danger); font-weight: bold; }
+.taken   { color: #27ae60; font-weight: bold; }
+
+/* =============================================
+   SOS / EMERGENCY PAGE
+   ============================================= */
+.sos-container {
+    text-align: center;
+    padding: clamp(20px, 5vw, 40px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.sos-info {
+    font-size: clamp(14px, 2vw, 16px);
+    margin-bottom: 16px;
+    color: var(--text-muted);
+    max-width: 480px;
+}
+
+.emergency-contacts {
+    margin-top: 32px;
+    text-align: center;
+    width: 100%;
+    max-width: 480px;
+}
+
+.emergency-contacts input {
+    padding: 10px 12px;
+    margin: 6px;
+    border: 1px solid #ccc;
+    border-radius: var(--radius-sm);
+    width: min(180px, calc(50% - 16px));
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+}
+
+.add-contact-btn {
+    padding: 10px 18px;
+    background: var(--blue);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    transition: background var(--transition);
+    margin-top: 6px;
+}
+
+.add-contact-btn:hover { background: #1a5fd1; }
+
+#contactList {
+    list-style: none;
+    padding: 0;
+    margin-top: 14px;
+}
+
+#contactList li {
+    margin: 6px 0;
+    font-size: 14px;
+}
+
+.ambulance {
+    margin-top: 14px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+#sosStatus {
+    margin-top: 12px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+/* =============================================
+   FLOATING BOTTOM HOME BUTTON
+   ============================================= */
+.bottom-home {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 200;
+    text-align: center;
+    pointer-events: none;           /* let clicks through except the button */
+}
+
+.bottom-home button {
+    pointer-events: auto;
+    background: var(--blue);
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: var(--radius-full);
+    font-size: clamp(14px, 2vw, 16px);
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.22);
+    transition: background var(--transition), transform var(--transition);
+}
+
+.bottom-home button:hover {
+    background: #1a5fd0;
+    transform: translateY(-2px);
+}
+
+/* =============================================
+   FLOATING VOICE / MIC BUTTON
+   ============================================= */
+.voice-box {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 200;                   /* below alarm modal */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+.mic-btn {
+    background: var(--gold-dark);
+    color: white;
+    border: none;
+    padding: 14px 20px;
+    font-size: 18px;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+    font-weight: bold;
+    font-family: 'Poppins', sans-serif;
+    transition: background var(--transition), transform var(--transition);
+}
+
+.mic-btn:hover    { background: var(--gold); }
+.mic-btn:active   { transform: scale(0.95); }
+
+#voiceStatus {
+    font-size: 13px;
+    color: #333;
+    background: rgba(255,255,255,0.85);
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+}
+
+#listeningIndicator {
+    color: var(--danger);
+    font-weight: bold;
+    font-size: 13px;
+}
+
+/* Legacy selector kept */
+#voiceBtn {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #ff4b4b;
+    color: white;
+    font-size: 26px;
+    border: none;
+    cursor: pointer;
+    z-index: 200;
+}
+
+#voiceBtn.listening { animation: pulse 1s infinite; background: #ff0000; }
+
+/* =============================================
+   WAVEFORM
+   ============================================= */
+.waveform {
+    display: none;
+    margin-top: 6px;
+    height: 20px;
+    align-items: center;
+}
+
+.waveform span {
+    display: inline-block;
+    width: 4px;
+    height: 100%;
+    margin: 0 2px;
+    background: var(--gold-dark);
+    border-radius: 2px;
+    animation: wave 1s infinite ease-in-out;
+}
+
+.waveform span:nth-child(2) { animation-delay: 0.1s; }
+.waveform span:nth-child(3) { animation-delay: 0.2s; }
+.waveform span:nth-child(4) { animation-delay: 0.3s; }
+.waveform span:nth-child(5) { animation-delay: 0.4s; }
+
+/* =============================================
+   ALARM MODAL
+   ============================================= */
+.alarm-modal {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #f5efe6, #e6d3b3, var(--gold));
+    z-index: 99999;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.alarm-modal.active {
+    display: flex;
+    pointer-events: auto;
+}
+
+.alarm-container {
+    text-align: center;
+    color: white;
+    padding: clamp(24px, 5vw, 48px);
+    pointer-events: auto;
+}
+
+.alarm-clock {
+    font-size: clamp(48px, 12vw, 80px);
+    font-weight: bold;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+}
+
+.alarm-icon {
+    font-size: clamp(40px, 10vw, 60px);
+    margin: 10px 0;
+    animation: ring 1s infinite;
+    display: block;
+}
+
+.alarm-buttons {
+    margin-top: 30px;
+    display: flex;
+    gap: clamp(16px, 4vw, 30px);
+    justify-content: center;
+    flex-wrap: wrap;
+    pointer-events: auto;
+}
+
+#snoozeBtn,
+#dismissBtn {
+    border: none;
+    padding: clamp(12px, 3vw, 16px) clamp(20px, 5vw, 32px);
+    border-radius: var(--radius-full);
+    font-size: clamp(15px, 2.5vw, 18px);
+    font-weight: bold;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    touch-action: manipulation;
+    transition: transform var(--transition);
+}
+
+#snoozeBtn {
+    background: var(--gold-light);
+    color: white;
+    box-shadow: 0 0 15px rgba(212,163,115,0.8);
+}
+
+#dismissBtn {
+    background: var(--gold-dark);
+    color: white;
+    box-shadow: 0 0 15px rgba(139,94,52,0.8);
+}
+
+#snoozeBtn:hover,  #dismissBtn:hover  { transform: scale(1.08); }
+#snoozeBtn:active, #dismissBtn:active { transform: scale(0.95); }
+
+/* =============================================
+   UTILITY CLASSES
+   ============================================= */
+.fade-in  { animation: fadeIn  0.4s ease-in; }
+.fade-out { animation: fadeOut 0.4s forwards; }
+
+/* =============================================
+   ANIMATIONS
+   ============================================= */
+@keyframes pulse {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.08); }
+    100% { transform: scale(1); }
+}
+
+@keyframes ring {
+    0%   { transform: rotate(0deg);   }
+    25%  { transform: rotate(10deg);  }
+    50%  { transform: rotate(0deg);   }
+    75%  { transform: rotate(-10deg); }
+    100% { transform: rotate(0deg);   }
+}
+
+@keyframes wave {
+    0%, 100% { transform: scaleY(0.3); }
+    50%       { transform: scaleY(1);   }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateX(10px); }
+    to   { opacity: 1; transform: translateX(0);    }
+}
+
+@keyframes fadeOut {
+    to { opacity: 0; transform: translateX(-10px); }
+}
+
+/* =============================================
+   RESPONSIVE — TABLET  (≤ 900px)
+   ============================================= */
+@media (max-width: 900px) {
+    .services-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* =============================================
+   RESPONSIVE — MOBILE  (≤ 600px)
+   ============================================= */
+@media (max-width: 600px) {
+    /* Navbar */
+    .navbar {
+        height: auto;
+        padding: 12px 16px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .logo-container h1 { font-size: 18px; }
+    .logo-container img { width: 38px; }
+
+    .nav-right {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .language-container label { display: none; } /* hide "Language:" text on small screens */
+
+    /* Hero */
+    .hero-content h2 { font-size: 30px; }
+    .hero-content p  { font-size: 14px; }
+    .cta-btn         { font-size: 14px; padding: 12px 22px; }
+
+    /* Services grid — 2 columns on small phones */
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .card img { height: 120px; }
+    .card h3  { font-size: 13px; padding: 10px; }
+
+    /* Form inputs stack on mobile */
+    .form-box input,
+    .form-box select,
+    .form-box button {
+        width: 100%;
+        max-width: 100%;
+        margin: 6px 0;
+    }
+
+    .reminder-inputs {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .reminder-inputs input,
+    .reminder-inputs button {
+        max-width: 100%;
+        flex: none;
+    }
+
+    .emergency-contacts input {
+        width: 100%;
+        margin: 4px 0;
+    }
+
+    /* Floating buttons: don't overlap each other */
+    .bottom-home {
+        bottom: 80px;    /* push up above voice button */
+    }
+
+    /* Voice/mic stays bottom-left */
+    .voice-box {
+        bottom: 16px;
+        left: 16px;
+    }
+
+    /* Alarm modal text */
+    .alarm-clock { font-size: 48px; }
+    .alarm-icon  { font-size: 40px; }
+
+    .alarm-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+    }
+
+    #snoozeBtn,
+    #dismissBtn {
+        width: 200px;
+        font-size: 16px;
+    }
+}
+
+/* =============================================
+   RESPONSIVE — VERY SMALL  (≤ 380px)
+   ============================================= */
+@media (max-width: 380px) {
+    .services-grid {
+        grid-template-columns: 1fr 1fr;  /* keep 2-col even on tiny screens */
+    }
+
+    .card img { height: 100px; }
+}

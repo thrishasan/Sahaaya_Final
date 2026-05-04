@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sahaaya Provider Registration</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg,#f5f1ea,#e6d8c3);
+}
+
+.hero {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+}
+
+.container {
+    max-width: 700px;
+    margin: auto;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+input, select {
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.file-box {
+    border: 2px dashed #aaa;
+    padding: 15px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    background: #b08b57;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:disabled {
+    background: gray;
+}
+
+.success {
+    display: none;
+    margin-top: 20px;
+    background: #e6f4ea;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.preview {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+}
+</style>
+</head>
+
+<body>
+
+<div class="hero">
+    <h1>Join Sahaaya Network</h1>
+    <p>Register as a verified healthcare provider</p>
+</div>
+
+<div class="container">
+
+    <input id="name" placeholder="Name">
+    <input id="specialization" placeholder="Specialization">
+    <input id="experience" placeholder="Experience">
+    <input id="location" placeholder="Location">
+    <input id="phone" placeholder="Phone">
+    <input id="fee" placeholder="Consultation Fee (₹)">
+
+    <select id="type">
+        <option value="">Select Type</option>
+        <option>Doctor</option>
+        <option>Hospital</option>
+        <option>Clinic</option>
+    </select>
+
+    <div class="file-box">
+        Upload License
+        <input type="file" id="license" onchange="previewFile()">
+        <div id="filePreview" class="preview"></div>
+    </div>
+
+    <button id="submitBtn" onclick="registerDoctor()">Register</button>
+
+    <div id="successMsg" class="success">
+        ✅ Registration submitted successfully<br><br>
+        Your profile is under review by Sahaaya Admin.
+    </div>
+
+</div>
+
+<script>
+
+function previewFile() {
+    const file = document.getElementById("license").files[0];
+    if (file) {
+        document.getElementById("filePreview").innerText =
+            "Uploaded: " + file.name;
+    }
+}
+
+function validateForm() {
+
+    let name = document.getElementById("name").value.trim();
+    let type = document.getElementById("type").value;
+    let phone = document.getElementById("phone").value.trim();
+    let license = document.getElementById("license").files.length;
+
+    if (!name) return alert("Name required"), false;
+    if (!type) return alert("Select type"), false;
+    if (!phone) return alert("Phone required"), false;
+    if (!license) return alert("Upload license"), false;
+
+    return true;
+}
+
+ 
+
+
+ function registerDoctor() {
+
+    if (!validateForm()) return;
+
+    let fileInput = document.getElementById("license");
+let file = fileInput.files[0];
+    let reader = new FileReader();
+
+    reader.onload = function (e) {
+
+        let doctor = {
+            id: Date.now(),
+            name: document.getElementById("name").value.trim(),
+            specialization: document.getElementById("specialization").value.trim(),
+            experience: document.getElementById("experience").value,
+            location: document.getElementById("location").value.trim(),
+            phone: document.getElementById("phone").value.trim(),
+            type: document.getElementById("type").value,
+            fee: document.getElementById("fee")?.value?.trim() || "0",
+            status: "Pending",
+            rating: "New",
+            image: "https://randomuser.me/api/portraits/lego/1.jpg",
+            license: e.target.result, // ✅ STORE PDF/FILE HERE
+            registeredAt: new Date().toLocaleString()
+        };
+
+        let list = JSON.parse(localStorage.getItem("doctors")) || [];
+
+        let duplicate = list.find(d =>
+            (d.phone || "") === doctor.phone
+        );
+
+        if (duplicate) {
+            alert("Provider already registered.");
+            return;
+        }
+
+        list.push(doctor);
+        localStorage.setItem("doctors", JSON.stringify(list));
+
+        console.log("Saved doctors:", list);
+
+        document.getElementById("successMsg").style.display = "block";
+        document.getElementById("submitBtn").disabled = true;
+        document.getElementById("submitBtn").innerText = "Submitted";
+
+        setTimeout(() => {
+            document.getElementById("name").value = "";
+            document.getElementById("specialization").value = "";
+            document.getElementById("experience").value = "";
+            document.getElementById("location").value = "";
+            document.getElementById("phone").value = "";
+            document.getElementById("type").value = "";
+            document.getElementById("fee").value = "";
+            document.getElementById("license").value = "";
+            document.getElementById("filePreview").innerText = "";
+        }, 1500);
+    };
+
+    reader.readAsDataURL(file);
+}
+
+
+</script>
+
+
+
+
+</body>
+</html>

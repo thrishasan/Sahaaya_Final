@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sahaaya | Premium Find Care</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f5f1ea, #e6d8c3);
+    color: #333;
+}
+
+/* HERO */
+.hero {
+    height: 260px;
+    background: url('https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=1600') center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+}
+
+.hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    margin-bottom: 10px;
+}
+
+/* MAIN */
+.container {
+    max-width: 1100px;
+    margin: -40px auto 40px;
+    padding: 20px;
+}
+
+/* SEARCH + FILTER */
+.top-controls {
+    background: white;
+    padding: 20px;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    margin-bottom: 25px;
+}
+
+.search-box {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+    font-size: 15px;
+}
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.filters select,
+.filters button {
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    font-size: 14px;
+}
+
+.filters select {
+    background: #f8f8f8;
+    flex: 1;
+}
+
+.emergency-btn {
+    background: #c62828;
+    color: white;
+    cursor: pointer;
+}
+
+.saved-btn {
+    background: #b08b57;
+    color: white;
+    cursor: pointer;
+}
+
+/* MESSAGE */
+.message {
+    text-align: center;
+    padding: 14px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    background: #fff3cd;
+}
+
+/* GRID */
+.providers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+    gap: 20px;
+}
+
+/* CARD */
+.card {
+    background: white;
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+}
+
+.card-top {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.card img {
+    width: 85px;
+    height: 85px;
+    border-radius: 15px;
+    object-fit: cover;
+}
+
+.provider-info h3 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.badge {
+    display: inline-block;
+    background: #2e7d32;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.rating {
+    color: #ff9800;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.meta {
+    margin: 6px 0;
+    color: #555;
+    font-size: 14px;
+}
+
+/* BUTTONS */
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.call {
+    background: #2e7d32;
+    color: white;
+}
+
+.book {
+    background: #b08b57;
+    color: white;
+}
+
+.save {
+    background: #f5f1ea;
+}
+
+.map {
+    background: #1976d2;
+    color: white;
+}
+
+/* BOOKING MODAL */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.modal-box {
+    background: white;
+    padding: 30px;
+    border-radius: 18px;
+    width: 90%;
+    max-width: 400px;
+}
+
+.modal-box input,
+.modal-box select {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+.close-btn {
+    background: gray;
+    color: white;
+    margin-top: 10px;
+}
+
+/* EMPTY */
+.empty {
+    text-align: center;
+    padding: 30px;
+    font-size: 18px;
+    color: #666;
+}
+</style>
+</head>
+
+<body>
+
+<div class="hero">
+    <div class="hero-content">
+        <h1>Find Trusted Healthcare Providers</h1>
+        <p>Doctors • Clinics • Hospitals • Emergency Care</p>
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="top-controls">
+
+        <input
+            type="text"
+            id="searchInput"
+            class="search-box"
+            placeholder="Search doctors, hospitals, location, specialization..."
+            onkeyup="filterProviders()"
+        >
+
+        <div class="filters">
+            <select id="typeFilter" onchange="filterProviders()">
+                <option value="">All Types</option>
+                <option value="Doctor">Doctor</option>
+                <option value="Hospital">Hospital</option>
+                <option value="Clinic">Clinic</option>
+            </select>
+
+            <select id="specializationFilter" onchange="filterProviders()">
+                <option value="">All Specializations</option>
+                <option value="Cardiology">Cardiology</option>
+                <option value="General">General</option>
+                <option value="Orthopedic">Orthopedic</option>
+            </select>
+
+            <button class="emergency-btn" onclick="showEmergency()">🚑 Emergency</button>
+            <button class="saved-btn" onclick="viewSaved()">❤️ Saved</button>
+        </div>
+
+    </div>
+
+    <div id="message" class="message"></div>
+
+    <div id="providersList" class="providers-grid"></div>
+
+    <div id="empty" class="empty"></div>
+
+</div>
+
+<!-- BOOKING MODAL -->
+<div class="modal" id="bookingModal">
+    <div class="modal-box">
+        <h2>Book Appointment</h2>
+
+        <p id="bookingDoctor"></p>
+
+        <input type="date" id="bookingDate">
+
+        <select id="bookingTime">
+            <option>10:00 AM</option>
+            <option>12:00 PM</option>
+            <option>3:00 PM</option>
+            <option>6:00 PM</option>
+        </select>
+
+        <button class="btn book" onclick="confirmBooking()">Confirm Booking</button>
+        <button class="btn close-btn" onclick="closeBooking()">Close</button>
+
+
+    </div>
+
+
+</div>
+  <div class="bottom-home">
+    <button onclick="window.location.href='index.html'">⬅ Back to Home</button>
+  </div>
+
+<script>
+let role = localStorage.getItem("role");
+
+let doctors = JSON.parse(localStorage.getItem("doctors")) || [
+    {
+        name: "Dr. Priya Sharma",
+        type: "Doctor",
+        specialization: "Cardiology",
+        location: "Hyderabad",
+        phone: "9876543210",
+        experience: "12 years",
+        fee: "₹500",
+        rating: "4.8",
+        image: "https://randomuser.me/api/portraits/women/44.jpg",
+        status: "Verified"
+    },
+    {
+        name: "Apollo Care Center",
+        type: "Hospital",
+        specialization: "General",
+        location: "Secunderabad",
+        phone: "9123456780",
+        experience: "24/7",
+        fee: "₹800",
+        rating: "4.6",
+        image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=800",
+        status: "Verified"
+    }
+];
+
+let currentBooking = "";
+let savedProviders = JSON.parse(localStorage.getItem("savedProviders")) || [];
+
+if(role !== "senior" && role !== "caregiver"){
+    document.getElementById("message").innerText =
+        "⚠ View only mode. Login as Senior/Caregiver for booking.";
+} else {
+    document.getElementById("message").innerText =
+        "✔ Showing verified healthcare providers.";
+}
+
+function renderProviders(data) {
+    const container = document.getElementById("providersList");
+    const empty = document.getElementById("empty");
+
+    container.innerHTML = "";
+    let count = 0;
+
+    data.forEach(d => {
+        if(d.status !== "Verified") return;
+
+        count++;
+
+        container.innerHTML += `
+            <div class="card">
+                <div class="card-top">
+                    <img src="${d.image}" alt="${d.name}">
+                    <div class="provider-info">
+                        <h3>${d.name}</h3>
+                        <span class="badge">✔ Verified</span>
+                        <div class="rating">⭐ ${d.rating}</div>
+                        <div class="meta">${d.type} • ${d.specialization}</div>
+                    </div>
+                </div>
+
+                <div class="meta">📍 ${d.location}</div>
+                <div class="meta">🩺 Experience: ${d.experience}</div>
+                <div class="meta">💰 Fee: ${d.fee}</div>
+
+                <div class="actions">
+                    <button class="btn call" onclick="callProvider('${d.phone}')">📞 Call</button>
+                    <button class="btn book" onclick="bookAppointment('${d.name}')">📅 Book</button>
+                    <button class="btn save" onclick="saveProvider('${d.name}')">❤️ Save</button>
+                    <button class="btn map" onclick="viewMap('${d.location}')">🗺 Map</button>
+                </div>
+            </div>
+        `;
+    });
+
+    if(count === 0){
+        empty.innerText = "No providers found.";
+    } else {
+        empty.innerText = "";
+    }
+}
+
+function filterProviders() {
+    const query = document.getElementById("searchInput").value.toLowerCase();
+    const type = document.getElementById("typeFilter").value;
+    const specialization = document.getElementById("specializationFilter").value;
+
+    const filtered = doctors.filter(d =>
+        d.status === "Verified" &&
+        (d.name.toLowerCase().includes(query) ||
+         d.location.toLowerCase().includes(query) ||
+         d.specialization.toLowerCase().includes(query)) &&
+        (!type || d.type === type) &&
+        (!specialization || d.specialization === specialization)
+    );
+
+    renderProviders(filtered);
+}
+
+function callProvider(phone){
+    alert("Calling " + phone);
+}
+
+function bookAppointment(name){
+    if(role !== "senior" && role !== "caregiver"){
+        alert("Please login as Senior/Caregiver.");
+        return;
+    }
+
+    currentBooking = name;
+    document.getElementById("bookingDoctor").innerText = "Booking with " + name;
+    document.getElementById("bookingModal").style.display = "flex";
+}
+
+function closeBooking(){
+    document.getElementById("bookingModal").style.display = "none";
+}
+
+function confirmBooking(){
+    const date = document.getElementById("bookingDate").value;
+    const time = document.getElementById("bookingTime").value;
+
+    if(!date){
+        alert("Please select date.");
+        return;
+    }
+
+    let bookings = JSON.parse(localStorage.getItem("appointments")) || [];
+
+    bookings.push({
+        provider: currentBooking,
+        date,
+        time
+    });
+
+    localStorage.setItem("appointments", JSON.stringify(bookings));
+
+    alert(`Appointment booked with ${currentBooking} on ${date} at ${time}`);
+    closeBooking();
+}
+
+function saveProvider(name){
+    if(!savedProviders.includes(name)){
+        savedProviders.push(name);
+        localStorage.setItem("savedProviders", JSON.stringify(savedProviders));
+        alert(name + " saved!");
+    }
+}
+
+function viewSaved(){
+    alert("Saved Providers:\n" + savedProviders.join("\n"));
+}
+
+function showEmergency(){
+    alert("🚑 Emergency providers and ambulance support coming soon.");
+}
+
+function viewMap(location){
+    window.open(`https://www.google.com/maps/search/${location}`, "_blank");
+}
+
+renderProviders(doctors);
+</script>
+<script>
+document.addEventListener("backbutton", function (e) {
+    e.preventDefault();
+
+    // Try going back in browser history
+    if (document.referrer && document.referrer !== "") {
+        window.history.back();
+    } 
+    else {
+        // safer fallback instead of instant exit
+        window.location.href = "index.html";
+    }
+});
+</script>
+</body>
+</html>

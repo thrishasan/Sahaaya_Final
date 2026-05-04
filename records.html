@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Health Records - Sahaaya</title>
+    <link rel="icon" type="favicon.png" href="favicon.png">
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="feature-page">
+
+<h1 id="recordsTitle">📁 Health Records</h1>
+
+<div class="form-box">
+
+<select id="recordType" onchange="setUnit()">
+<option value="">Select Record Type</option>
+<option value="Blood Pressure">Blood Pressure</option>
+<option value="Temperature">Temperature</option>
+<option value="Heart Rate">Heart Rate</option>
+<option value="Blood Sugar">Blood Sugar</option>
+<option value="Allergy">Allergy</option>
+</select>
+
+<input type="text" id="recordValue" placeholder="Value (e.g. 120/80, 98.6)" required>
+<input type="text" id="recordUnit" placeholder="Unit" readonly>
+<input type="date" id="recordDate">
+<input type="text" id="recordNotes" placeholder="Notes (optional)">
+
+<button type="button" onclick="addRecord()" id="saveRecordBtn">
+Save Record
+</button>
+
+</div>
+
+<h2>Health Record History</h2>
+
+<table id="medicineTable">
+<thead>
+<tr>
+<th>Type</th>
+<th>Value</th>
+<th>Unit</th>
+<th>Date</th>
+<th>Notes</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody id="recordList">
+<tr>
+<td colspan="6">No records added yet</td>
+</tr>
+</tbody>
+</table>
+
+<div class="bottom-home">
+<button onclick="window.location.href='index.html'">
+⬅ Back to Home
+</button>
+</div>
+
+</div>
+
+<!-- Alarm Modal -->
+<div id="alarmModal" class="alarm-modal">
+<div class="alarm-container">
+<div class="alarm-clock" id="alarmClock">00:00</div>
+<div class="alarm-icon">⏰</div>
+<h2 id="alarmTitle">Reminder</h2>
+<p id="alarmText">Time for your reminder</p>
+
+<div class="alarm-buttons">
+<button id="snoozeBtn" class="snooze">Snooze</button>
+<button id="dismissBtn" class="dismiss">Dismiss</button>
+</div>
+</div>
+</div>
+
+<!-- Voice Assistant UI -->
+<div class="voice-box">
+    <button id="getStartedBtn" class="mic-btn">
+        🎤 Tap to Speak
+    </button>
+
+    <div class="waveform" id="waveform">
+        <span></span><span></span><span></span><span></span><span></span>
+    </div>
+
+    <div id="voiceStatus"></div>
+</div>
+
+<script src="script.js"></script>
+<script src="voiceAssistant.js"></script>
+
+</body>
+</html>

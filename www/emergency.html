@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Emergency SOS - Sahaaya</title>
+    <link rel="icon" type="favicon.png" href="favicon.png">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="feature-page">
+
+<h1>Emergency SOS</h1>
+
+<div class="sos-container">
+<p>Press the SOS button only during an emergency. It will notify caregivers immediately via WhatsApp.</p>
+
+<button class="big-sos" onclick="confirmSOS()">🚑 SOS</button>
+<p id="sosStatus"></p>
+
+<div class="emergency-contacts">
+<h3>Emergency Contacts</h3>
+
+<input type="text" id="contactName" placeholder="Contact Name">
+<input type="tel" id="contactPhone" placeholder="Phone Number">
+<button onclick="addContact()" class="add-contact-btn">Add Contact</button>
+
+<ul id="contactList"></ul>
+<p class="ambulance">🚑 Ambulance: 108</p>
+</div>
+</div>
+
+<div class="bottom-home">
+<button onclick="window.location.href='index.html'">⬅ Back to Home</button>
+</div>
+
+<button onclick="location.href='sos_history.html'">
+  View SOS History
+</button>
+
+<!-- ========== VOICE ASSISTANT UI ========== -->
+<div class="voice-box">
+  <button id="getStartedBtn" class="mic-btn">🎤 Tap to Speak</button>
+  <div class="waveform" id="waveform">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div id="voiceStatus"></div>
+</div>
+
+<!-- REPLACE your current script tags with these -->
+<script src="emergency.js"></script>
+<script src="script.js"></script>
+<script type="module" src="scheduler.js"></script>
+<script type="module" src="medicines.js"></script>
+<script src="voiceAssistant.js" defer></script>   
+
+
+
+<script>
+document.addEventListener("backbutton", function (e) {
+    e.preventDefault();
+
+    // Try going back in browser history
+    if (document.referrer && document.referrer !== "") {
+        window.history.back();
+    } 
+    else {
+        // safer fallback instead of instant exit
+        window.location.href = "index.html";
+    }
+});
+</script>
+
+</body>
+
+
+</html>
